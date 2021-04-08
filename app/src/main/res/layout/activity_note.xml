@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.NoteActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_marginEnd="20sp"
+        android:layout_marginStart="20sp"
+        android:layout_marginBottom="80sp"
+        android:layout_marginTop="80sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="4sp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:paddingStart="5sp"
+                android:paddingEnd="5sp"
+                android:id="@+id/tile_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="@string/title"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:maxLength="200"
+                android:padding="5sp"
+                android:textSize="20sp" />
+
+
+            <EditText
+                android:paddingStart="5sp"
+                android:paddingEnd="5sp"
+                android:id="@+id/description_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="8"
+                android:background="@null"
+                android:gravity="start"
+                android:hint="@string/description"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:maxLength="2000"
+                android:padding="5sp"
+                android:textAlignment="textStart"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

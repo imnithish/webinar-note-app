@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">NotesApp</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="new_note">New note</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="delete">Delete</string>
+    <string name="empty_note_discarded">Empty note discarded!</string>
+    <string name="sure_to_delete">Sure to delete?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+</resources>
