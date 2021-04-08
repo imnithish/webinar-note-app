@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,10 +53,16 @@ class HomeActivity : AppCompatActivity(), NotesAdapter.NoteClick {
         }
 
         noteDao.getAllNotes().observe(this, {
-            noteAdapter = NotesAdapter(it.reversed(), this)
-            notes_list.apply {
-                adapter = noteAdapter
-                layoutManager = LinearLayoutManager(this@HomeActivity)
+
+            if (it.isNullOrEmpty()) {
+                empty.visibility = View.VISIBLE
+            } else {
+                noteAdapter = NotesAdapter(it.reversed(), this)
+                notes_list.apply {
+                    adapter = noteAdapter
+                    layoutManager = LinearLayoutManager(this@HomeActivity)
+                }
+                empty.visibility = View.GONE
             }
         })
 
