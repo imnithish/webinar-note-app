@@ -8,12 +8,19 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.imnstudios.notesapp.data.Note
 import com.imnstudios.notesapp.R
 import com.imnstudios.notesapp.data.NoteDao
 import com.imnstudios.notesapp.data.NoteDatabase
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 object DummyList {
@@ -61,6 +68,8 @@ class HomeActivity : AppCompatActivity(), NotesAdapter.NoteClick {
                 notes_list.apply {
                     adapter = noteAdapter
                     layoutManager = LinearLayoutManager(this@HomeActivity)
+                    val swipe = ItemTouchHelper(swipeHelper)
+                    swipe.attachToRecyclerView(this)
                 }
                 empty.visibility = View.GONE
             }
@@ -69,7 +78,42 @@ class HomeActivity : AppCompatActivity(), NotesAdapter.NoteClick {
         new_note_button.setOnClickListener {
             startActivity(Intent(this@HomeActivity, NoteActivity::class.java))
         }
+    }
 
+    private val swipeHelper by lazy {
+        object : ItemTouchHelper.SimpleCallback(
+            0, ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val note = noteAdapter.getItemAt(position)
+                MaterialAlertDialogBuilder(this@HomeActivity).setTitle(getString(R.string.app_name))
+                    .setMessage(getString(R.string.sure_to_delete))
+                    .setPositiveButton(getString(R.string.no)) { dialog, _ ->
+                        dialog.dismiss()
+                        noteAdapter.notifyItemChanged(viewHolder.adapterPosition)
+                    }
+                    .setNegativeButton(getString(R.string.yes)) { dialog, _ ->
+                        dialog.dismiss()
+                        lifecycleScope.launch {
+                            withContext(Dispatchers.IO) {
+                                noteDao.delete(note)
+                            }
+                        }
+                    }
+                    .setCancelable(true)
+                    .show()
+
+            }
+        }
 
     }
 
