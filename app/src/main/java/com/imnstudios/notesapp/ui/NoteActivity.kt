@@ -29,7 +29,7 @@ class NoteActivity : AppCompatActivity() {
         setContentView(R.layout.activity_note)
 
         NoteDatabase.getDatabase(applicationContext)?.let {
-            noteDao = it.weightLogDao()
+            noteDao = it.noteDao()
         }
 
         note = intent?.getSerializableExtra("note") as Note?
@@ -84,9 +84,22 @@ class NoteActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val titleString = tile_edit_text.text.toString()
         val descriptionString = description_edit_text.text.toString()
-        if (titleString.isEmpty() && descriptionString.isEmpty())
-            Toast.makeText(this, getString(R.string.empty_note_discarded), Toast.LENGTH_SHORT).show()
-        else {
+        if (titleString.isEmpty() && descriptionString.isEmpty()) {
+            lifecycleScope.launch {
+                note?.let {
+                    withContext(Dispatchers.IO) {
+                        noteDao.delete(it)
+                    }
+                }
+                Toast.makeText(
+                    applicationContext,
+                    getString(R.string.empty_note_discarded),
+                    Toast.LENGTH_SHORT
+                ).show()
+                startActivity(Intent(this@NoteActivity, HomeActivity::class.java))
+                finishAffinity()
+            }
+        } else {
             // upsert into db
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) {
@@ -109,6 +122,8 @@ class NoteActivity : AppCompatActivity() {
                     }
 
                 }
+                startActivity(Intent(this@NoteActivity, HomeActivity::class.java))
+                finishAffinity()
             }
         }
         super.onBackPressed()

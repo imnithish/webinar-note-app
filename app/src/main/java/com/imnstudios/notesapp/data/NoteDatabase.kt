@@ -8,10 +8,12 @@ import androidx.room.RoomDatabase
 @Database(entities = [Note::class], version = 1)
 abstract class NoteDatabase : RoomDatabase() {
 
-    abstract fun weightLogDao(): NoteDao
+    abstract fun noteDao(): NoteDao
 
     companion object {
         var instance: NoteDatabase? = null
+
+        // to be synchronized
         fun getDatabase(context: Context): NoteDatabase? {
             if (instance == null) {
                 instance = Room.databaseBuilder(
