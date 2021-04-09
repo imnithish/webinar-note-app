@@ -55,11 +55,12 @@ class HomeActivity : AppCompatActivity(), NotesAdapter.NoteClick {
 
         setContentView(R.layout.activity_home)
 
-        // to get the client
+        // to get the instance of database
         NoteDatabase.getDatabase(applicationContext)?.let {
             noteDao = it.noteDao()
         }
 
+//        noteDao =  NoteDatabase.getDatabase(applicationContext).noteDao()
         // LiveData is an observable data holder class
         noteDao.getAllNotes().observe(this, {
 

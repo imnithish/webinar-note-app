@@ -11,17 +11,17 @@ abstract class NoteDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
 
     companion object {
-        var instance: NoteDatabase? = null
+        var noteDatabase: NoteDatabase? = null
 
         // to be synchronized
         fun getDatabase(context: Context): NoteDatabase? {
-            if (instance == null) {
-                instance = Room.databaseBuilder(
+            if (noteDatabase == null) {
+                noteDatabase = Room.databaseBuilder(
                     context.applicationContext, NoteDatabase::class.java,
                     "NotesAppDatabase"
                 ).fallbackToDestructiveMigration().build()
             }
-            return instance
+            return noteDatabase
         }
     }
 }
